@@ -137,7 +137,8 @@ public class JavalinPac4jExample {
     }
 
     private static void protectedPage(Context ctx) {
-        ctx.render("/templates/protectedPage.vm", model("profiles", getProfiles(ctx)));
+        List<CommonProfile> profiles = getProfiles(ctx);
+        ctx.render("/templates/protectedPage.vm", model("profiles", profiles));
     }
 
     private static List<CommonProfile> getProfiles(Context ctx) {
