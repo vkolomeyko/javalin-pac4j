@@ -34,6 +34,9 @@
         <a href="/oidc">Protected url by OpenID Connect: /oidc</a> (use a real account)
     </li>
     <li>
+        <a href="/azureAD">Protected url by AzureAD: /azureAD</a> (use a real account)
+    </li>
+    <li>
         <a href="protected">Protected url: /protected</a> (won't start any login process)
     </li>
     <li>

@@ -20,7 +20,9 @@ import org.pac4j.jwt.config.signature.SecretSignatureConfiguration;
 import org.pac4j.jwt.credentials.authenticator.JwtAuthenticator;
 import org.pac4j.oauth.client.FacebookClient;
 import org.pac4j.oauth.client.TwitterClient;
+import org.pac4j.oidc.client.AzureAdClient;
 import org.pac4j.oidc.client.OidcClient;
+import org.pac4j.oidc.config.AzureAdOidcConfiguration;
 import org.pac4j.oidc.config.OidcConfiguration;
 import org.pac4j.saml.client.SAML2Client;
 import org.pac4j.saml.config.SAML2Configuration;
@@ -47,6 +49,8 @@ public class ExampleConfigFactory implements ConfigFactory {
             profile.addRole("ROLE_ADMIN");
             return Optional.of(profile);
         });
+
+        AzureAdClient azureAdClient = configureAzureAdClient();
 
         SAML2Configuration cfg = new SAML2Configuration(
             "resource:samlKeystore.jks",
@@ -99,7 +103,8 @@ public class ExampleConfigFactory implements ConfigFactory {
             parameterClient,
             directBasicAuthClient,
             new AnonymousClient(),
-            headerClient
+            headerClient,
+            azureAdClient
         );
 
         Config config = new Config(clients);
@@ -108,5 +113,22 @@ public class ExampleConfigFactory implements ConfigFactory {
         config.addMatcher("excludedPath", new PathMatcher().excludeRegex("^/facebook/notprotected$"));
         config.setHttpActionAdapter(new ExampleHttpActionAdapter());
         return config;
+    }
+
+    private AzureAdClient configureAzureAdClient() {
+
+        AzureAdOidcConfiguration azureADConfiguration = new AzureAdOidcConfiguration();
+        azureADConfiguration.setTenant("a4be1f2e-2d10-4195-87cd-736aca9b672c");
+        azureADConfiguration.setClientId("f4a37d97-c561-4367-97fd-b10d44ceae24");
+        azureADConfiguration.setSecret("uR3D8ej1kIRPbqAFaxIE3HWh");
+        azureADConfiguration.setUseNonce(true);
+
+        AzureAdClient result = new AzureAdClient(azureADConfiguration);
+        result.setAuthorizationGenerator((ctx, profile) -> {
+            profile.addRole("ROLE_ADMIN");
+            return Optional.of(profile);
+        });
+
+        return result;
     }
 }
