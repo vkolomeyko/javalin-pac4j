@@ -7,7 +7,10 @@ import org.pac4j.core.client.Clients;
 import org.pac4j.core.client.direct.AnonymousClient;
 import org.pac4j.core.config.Config;
 import org.pac4j.core.config.ConfigFactory;
+import org.pac4j.core.context.WebContext;
 import org.pac4j.core.credentials.TokenCredentials;
+import org.pac4j.core.http.callback.CallbackUrlResolver;
+import org.pac4j.core.http.url.UrlResolver;
 import org.pac4j.core.matching.matcher.PathMatcher;
 import org.pac4j.core.profile.CommonProfile;
 import org.pac4j.core.util.CommonHelper;
@@ -127,6 +130,18 @@ public class ExampleConfigFactory implements ConfigFactory {
         result.setAuthorizationGenerator((ctx, profile) -> {
             profile.addRole("ROLE_ADMIN");
             return Optional.of(profile);
+        });
+        result.setCallbackUrlResolver( new CallbackUrlResolver() {
+
+            @Override
+            public String compute(UrlResolver urlResolver, String url, String clientName, WebContext context) {
+                return context.getFullRequestURL();
+            }
+
+            @Override
+            public boolean matches(String clientName, WebContext context) {
+                return true;
+            }
         });
 
         return result;
