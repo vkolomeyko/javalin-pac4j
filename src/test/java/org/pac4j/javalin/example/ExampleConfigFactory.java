@@ -131,18 +131,6 @@ public class ExampleConfigFactory implements ConfigFactory {
             profile.addRole("ROLE_ADMIN");
             return Optional.of(profile);
         });
-        result.setCallbackUrlResolver( new CallbackUrlResolver() {
-
-            @Override
-            public String compute(UrlResolver urlResolver, String url, String clientName, WebContext context) {
-                return context.getFullRequestURL();
-            }
-
-            @Override
-            public boolean matches(String clientName, WebContext context) {
-                return true;
-            }
-        });
 
         return result;
     }

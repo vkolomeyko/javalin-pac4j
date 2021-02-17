@@ -70,7 +70,7 @@ public class JavalinPac4jExample {
                     get("/oidc", JavalinPac4jExample::protectedPage);
 
                     before("/azureAD", new SecurityHandler(config, "AzureAdClient"));
-                    get("/azureAD", JavalinPac4jExample::protectedPage);
+                    get("/callback/AzureAdClient", JavalinPac4jExample::protectedPage);
 
                     before("/protected", new SecurityHandler(config, null));
                     get("/protected", JavalinPac4jExample::protectedPage);
