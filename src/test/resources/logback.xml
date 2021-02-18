@@ -4,7 +4,10 @@
             <pattern>JAVALIN PAC4J EXAMPLE %d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
         </encoder>
     </appender>
-    <root level="INFO">
+    <root level="info">
         <appender-ref ref="STDOUT"/>
     </root>
+
+    <logger name="org.pac4j" level="debug"/>
+
 </configuration>

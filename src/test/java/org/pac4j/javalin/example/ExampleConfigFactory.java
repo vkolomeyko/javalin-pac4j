@@ -123,7 +123,7 @@ public class ExampleConfigFactory implements ConfigFactory {
         AzureAdOidcConfiguration azureADConfiguration = new AzureAdOidcConfiguration();
         azureADConfiguration.setTenant("a4be1f2e-2d10-4195-87cd-736aca9b672c");
         azureADConfiguration.setClientId("f4a37d97-c561-4367-97fd-b10d44ceae24");
-        azureADConfiguration.setSecret("uR3D8ej1kIRPbqAFaxIE3HWh");
+        azureADConfiguration.setSecret("x55M76kwc~89j3TY.k_8trJki-c_kFjSw4");
         azureADConfiguration.setUseNonce(true);
 
         AzureAdClient result = new AzureAdClient(azureADConfiguration);

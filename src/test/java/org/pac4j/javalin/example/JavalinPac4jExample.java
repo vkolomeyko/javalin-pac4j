@@ -36,7 +36,7 @@ public class JavalinPac4jExample {
                 .routes(() -> {
 
                     get("/", JavalinPac4jExample::index);
-                    get("/callback", callback);
+                    get("/callback/*", callback);
                     post("/callback", callback);
 
                     before("/facebook", facebookSecurityHandler);
@@ -70,7 +70,7 @@ public class JavalinPac4jExample {
                     get("/oidc", JavalinPac4jExample::protectedPage);
 
                     before("/azureAD", new SecurityHandler(config, "AzureAdClient"));
-                    get("/callback/AzureAdClient", JavalinPac4jExample::protectedPage);
+                    get("/azureAD", JavalinPac4jExample::protectedPage);
 
                     before("/protected", new SecurityHandler(config, null));
                     get("/protected", JavalinPac4jExample::protectedPage);
