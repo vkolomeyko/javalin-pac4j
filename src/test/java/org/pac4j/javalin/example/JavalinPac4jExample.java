@@ -16,11 +16,13 @@ import org.slf4j.LoggerFactory;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static io.javalin.apibuilder.ApiBuilder.before;
 import static io.javalin.apibuilder.ApiBuilder.get;
 import static io.javalin.apibuilder.ApiBuilder.post;
 import static io.javalin.plugin.rendering.template.TemplateUtil.model;
+import static org.pac4j.oidc.profile.azuread.AzureAdProfileDefinition.UNQIUE_NAME;
 
 public class JavalinPac4jExample {
     private static final String JWT_SALT = "12345678901234567890123456789012";
@@ -91,7 +93,7 @@ public class JavalinPac4jExample {
                     before("/body", new SecurityHandler(config, "HeaderClient"));
                     post("/body", ctx -> {
                         logger.debug("Body: " + ctx.body());
-                        ctx.result("done: " + getProfiles(ctx));
+                        ctx.result("done: " + getProfilesAsHtmlString(ctx));
                     });
 
                 }).exception(Exception.class, (e, ctx) -> {
@@ -118,7 +120,7 @@ public class JavalinPac4jExample {
     }
 
     private static void index(Context ctx) {
-        ctx.render("/templates/index.vm", model("profiles", getProfiles(ctx)));
+        ctx.render("/templates/index.vm", model("profiles", getProfilesAsHtmlString(ctx)));
     }
 
     private static void jwt(Context ctx) {
@@ -141,12 +143,26 @@ public class JavalinPac4jExample {
     }
 
     private static void protectedPage(Context ctx) {
-        List<CommonProfile> profiles = getProfiles(ctx);
-        ctx.render("/templates/protectedPage.vm", model("profiles", profiles));
+        ctx.render("/templates/protectedPage.vm", model("profiles", getProfilesAsHtmlString(ctx)));
     }
 
-    private static List<CommonProfile> getProfiles(Context ctx) {
-        return new ProfileManager<CommonProfile>(new JavalinWebContext(ctx)).getAll(true);
+    private static String getProfilesAsHtmlString(Context ctx) {
+        List<CommonProfile> profiles = new ProfileManager<CommonProfile>(new JavalinWebContext(ctx)).getAll(true);
+
+        return profiles.stream().map(JavalinPac4jExample::profileAsString).collect(Collectors.joining());
+    }
+
+    private static String profileAsString(CommonProfile profile) {
+        return "<b>UniqueName:</b> " + getUniqueName(profile) + "</p><b>Other info:</b> " + profile;
+    }
+
+    private static String getUniqueName(CommonProfile profile) {
+        String un = (String)profile.getAttribute(UNQIUE_NAME);
+        if (un != null) {
+            return un;
+        }
+
+        return profile.getEmail();
     }
 
     private static void forceLogin(Context ctx, Config config) {
