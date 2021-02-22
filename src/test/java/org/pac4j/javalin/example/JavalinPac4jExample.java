@@ -36,6 +36,7 @@ public class JavalinPac4jExample {
                 .routes(() -> {
 
                     get("/", JavalinPac4jExample::index);
+                    get("/callback", callback);
                     get("/callback/*", callback);
                     post("/callback", callback);
 
